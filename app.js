@@ -1,22 +1,30 @@
 'use strict';
 
-function openFolderDialog(){
+function openFolderDialog(cb){
   var inputField = document.querySelector('#folderSelector');
   inputField.addEventListener('change', function(){
     var folderPath = this.value;
-    alert('Folder path is ' + folderPath);
+    cb(folderPath);
   }, false);
   inputField.click();
 }
 
-function bindSelectFolderClick(){
+function bindSelectFolderClick(cb){
   var button = document.querySelector('#select_folder');
   button.addEventListener('click', function(){
-    openFolderDialog();
+    openFolderDialog(cb);
   });
+}
+
+function hideSelectFolderButton(){
+  var button = document.querySelector('#select_folder');
+  button.style.display = 'none';
 }
 
 // Runs when the browser has loaded the page
 window.onload = function(){
-  bindSelectFolderClick();
+  bindSelectFolderClick(function(folderPath){
+    hideSelectFolderButton();
+    console.log(folderPath);
+  });
 };
