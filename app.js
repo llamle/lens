@@ -63,10 +63,33 @@ function findImageFiles(files, folderPath, cb){
 function addImageToPhotosArea(file){
   var photosArea = document.getElementById('photos');
   var template = document.querySelector('#photo-template');
-      template.content.querySelector('img').src = file.path;
-      template.content.querySelector('img').setAttribute('data-name', file.name);
+  template.content.querySelector('img').src = file.path;
+  template.content.querySelector('img').setAttribute('data-name', file.name);
   var clone = window.document.importNode(template.content, true);
     photosArea.appendChild(clone);
+}
+
+function displayPhotoInFullView (photo) {
+  var filePath = photo.querySelector('img').src;
+  var fileName = photo.querySelector('img').attributes[1].value;
+  document.querySelector('#fullViewPhoto > img').src = filePath;
+  document.querySelector('#fullViewPhoto > img').setAttribute('data-name', fileName);
+  document.querySelector('#fullViewPhoto').style.display = 'block';
+}
+
+
+function bindClickingOnAPhoto (photo) {
+  photo.onclick = function () {
+      displayPhotoInFullView(photo);
+  };
+}
+
+function bindClickingOnAllPhotos(){
+  var photos = document.querySelectorAll('.photo');
+  for (var i = 0; i < photos.length; i++) {
+    var photo = photos[i];
+    bindClickingOnAPhoto(photo);
+  }
 }
 
 // Runs when the browser has loaded the page
@@ -76,7 +99,12 @@ window.onload = function(){
     findAllFiles(folderPath, function(err, files){
       if (!err) {
         findImageFiles(files, folderPath, function(imageFiles){
-          imageFiles.forEach(addImageToPhotosArea);
+          imageFiles.forEach(function(file, index){
+            addImageToPhotosArea(file);
+            if (index === imageFiles.length-1) {
+              bindClickingOnAllPhotos();
+            }
+          });
         });
       }
     });
