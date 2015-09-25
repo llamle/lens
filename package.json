@@ -4,5 +4,8 @@
   "main": "index.html",
   "dependencies": {
     "mime": "^1.3.4"
+  },
+  "devDependencies": {
+    "css-filter-hue-rotate": "0.0.7"
   }
 }

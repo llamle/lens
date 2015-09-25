@@ -77,12 +77,144 @@ function displayPhotoInFullView(photo){
   document.querySelector('#fullViewPhoto').style.display = 'block';
 }
 
-function applyFilter(){
+var filters = {
+  original: function(){},
+
+  XPro2: function(item){
+    item.contrast(1.3);
+    item.brightness(0.8);
+    item.sepia(0.3);
+    item.saturate(1.5);
+    item.hue-rotate(-20);
+  },
+
+  Willow: function(item){
+    item.saturate(0.02);
+    item.contrast(0.85);
+    item.brightness(1.2);
+    item.sepia(0.02);
+  },
+
+  Walden: function(item){
+    item.sepia(0.35);
+    item.contrast(0.9);
+    item.brightness(1.1);
+    item.hue-rotate(-10);
+    item.saturate(1.5);
+  },
+
+  Valencia: function(item){
+    item.sepia(0.15);
+    item.saturate(1.5);
+    item.contrast(0.9);
+  },
+
+  Toaster: function(item){
+    item.sepia(0.4);
+    item.saturate(2.5);
+    item.hue-rotate(-30);
+    item.contrast(0.67);
+  },
+
+  Sutro: function(item){
+    item.brightness(0.75);
+    item.contrast(1.3);
+    item.sepia(0.5);
+    item.hue-rotate(-25);
+  },
+
+  Sierra: function(item){
+    item.contrast(0.8);
+    item.saturate(1.2);
+    item.sepia(0.15);
+  },
+
+  Rise: function(item){
+    item.saturate(1.4);
+    item.sepia(0.25);
+    item.hue-rotate(-15);
+    item.contrast(0.8);
+    item.brightness(1.1);
+  },
+
+  Nashville: function(item){
+    item.sepia(0.4);
+    item.saturate(1.5);
+    item.contrast(0.9);
+    item.brightness(1.1);
+    item.hue-rotate(-15);
+  },
+
+  Mayfair: function(item){
+    item.saturate(1.4);
+    item.contrast(1.1);
+  },
+
+  LoFi: function(item){
+    item.contrast(1.4);
+    item.brightness(0.9);
+    item.sepia(0.05);
+  },
+
+  Kelvin: function(item){
+    item.sepia(0.4);
+    item.saturate(2.4);
+    item.brightness(1.3);
+    item.contrast(1);
+  },
+
+  Inkwell: function(item){
+    item.grayscale(1);
+    item.brightness(1.2);
+    item.contrast(1.05);
+  },
+
+  Hudson: function(item){
+    item.contrast(1.2);
+    item.brightness(0.9);
+    item.hue-rotate(-10);
+  },
+
+  Hefe: function(item){
+    item.contrast(1.3);
+    item.sepia(0.3);
+    item.saturate(1.3);
+    item.hue-rotate(-10);
+    item.brightness(0.95);
+  },
+
+  Earlybird: function(item){
+    item.sepia(0.4);
+    item.saturate(1.6);
+    item.contrast(1.1);
+    item.brightness(0.9);
+    item.hue-rotate(-10);
+  },
+
+  Brannan: function(item){
+    item.sepia(0.5);
+    item.contrast(1.4);
+  },
+
+  Amaro: function(item){
+    item.hue-rotate(-10);
+    item.contrast(0.9);
+    item.brightness(1.1);
+    item.saturate(1.5);
+  },
+
+  IG1977: function(item){
+    item.sepia(0.5);
+    item.hue-rotate(-30);
+    item.saturate(1.2);
+    item.contrast(0.8);
+  }
+};
+
+function applyFilter(filterName){
   Caman('#image', function(){
-    this.brightness(10);
-    this.sepia(20);
-    this.saturation(30);
-    this.render();
+    this.reset();
+    filters[filterName](this)
   });
 }
 
