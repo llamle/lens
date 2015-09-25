@@ -69,7 +69,7 @@ function addImageToPhotosArea(file){
     photosArea.appendChild(clone);
 }
 
-function displayPhotoInFullView (photo) {
+function displayPhotoInFullView(photo){
   var filePath = photo.querySelector('img').src;
   var fileName = photo.querySelector('img').attributes[1].value;
   document.querySelector('#fullViewPhoto > img').src = filePath;
@@ -77,12 +77,27 @@ function displayPhotoInFullView (photo) {
   document.querySelector('#fullViewPhoto').style.display = 'block';
 }
 
+function applyFilter(){
+  Caman('#image', function(){
+    this.brightness(10);
+    this.sepia(20);
+    this.saturation(30);
+    this.render();
+  });
+}
+
 function backToGridView(){
+  var canvas = document.querySelector('canvas');
+  var image  = document.createElement('img');
+  image.setAttribute('id', 'image');
+  canvas.parentNode.removeChild(canvas);
+  var fullViewPhoto = document.querySelector('#fullViewPhoto');
+  fullViewPhoto.insertBefore(image, fullViewPhoto.firstChild);
   document.querySelector('#fullViewPhoto').style.display = 'none';
 }
 
-function bindClickingOnAPhoto (photo) {
-  photo.onclick = function () {
+function bindClickingOnAPhoto(photo){
+  photo.onclick = function(){
       displayPhotoInFullView(photo);
   };
 }
