@@ -26,7 +26,7 @@ body {
     cursor: pointer;
 }
 
-#folderSelector {
+#folderSelector, #photoSaver {
   display: none;
 }
 
@@ -81,7 +81,7 @@ body {
     opacity: 1;
 }
 
-#back {
+#back, #save {
     float: right;
 }
 

@@ -3,6 +3,7 @@
     <title>Lens</title>
     <link rel="stylesheet" href="app.css" />
     <script src="scripts/caman.full.min.js"></script>
+    <script src="scripts/echo.min.js"></script>
     <script src="app.js"></script>
   </head>
   <body>
@@ -11,6 +12,8 @@
         <img />
       </div>
     </template>
+
+    <input type="file" nwsaves id="photoSaver" />
 
     <input type="file" nwdirectory id="folderSelector" />
 
@@ -25,7 +28,25 @@
       <div id="toolbar">
         <div id="filterLabel">Filters</div>
 
-        <div class="filter" onclick="applyFilter('Original');" title="Original">
+<!-- Default Filters -->
+        <div class="filter" onclick="applyFilter('original');" title="original">
+            <img src="images/original.png" alt="original" />
+        </div>
+        <div class="filter" onclick="applyFilter('grayscale');" title="grayscale">
+            <img src="images/grayscale.png" alt="grayscale"/>
+        </div>
+        <div class="filter" onclick="applyFilter('sepia');" title="sepia">
+            <img src="images/sepia.png" alt="sepia"/>
+        </div>
+        <div class="filter" onclick="applyFilter('sunburst');" title="sunburst">
+            <img src="images/sunburst.png" alt="sunburst"/>
+        </div>
+        <div class="filter" onclick="applyFilter('port');" title="port">
+            <img src="images/port.png" alt="port"/>
+        </div>
+
+<!-- Custom Filters -->
+        <!-- <div class="filter" onclick="applyFilter('Original');" title="Original">
           <img src="images/Original.jpg" alt="Original" />
         </div>
 
@@ -103,9 +124,12 @@
 
         <div class="filter" onclick="applyFilter('IG1977');" title="1977">
           <img src="images/IG1977.jpg" alt="IG1977" />
-        </div>
+        </div> -->
 
         <div id="back" class="button" onclick="backToGridView();">Back</div>
+
+        <div id="save" class="button" onclick="saveToDisk();">Save as</div>
+
       </div>
     </div>
 

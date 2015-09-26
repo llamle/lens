@@ -1,9 +1,10 @@
 'use strict';
 
 // Dependencies
-var fs   = require('fs');
-var mime = require('mime');
-var path = require('path');
+var fs        = require('fs');
+var mime      = require('mime');
+var path      = require('path');
+var photoData = null;
 
 function openFolderDialog(cb){
   var inputField = document.querySelector('#folderSelector');
@@ -77,139 +78,195 @@ function displayPhotoInFullView(photo){
   document.querySelector('#fullViewPhoto').style.display = 'block';
 }
 
+// Default Filters
 var filters = {
-  original: function(){},
+    original: function () {},
 
-  XPro2: function(item){
-    item.contrast(1.3);
-    item.brightness(0.8);
-    item.sepia(0.3);
-    item.saturate(1.5);
-    item.hue-rotate(-20);
-  },
-
-  Willow: function(item){
-    item.saturate(0.02);
-    item.contrast(0.85);
-    item.brightness(1.2);
-    item.sepia(0.02);
-  },
-
-  Walden: function(item){
-    item.sepia(0.35);
-    item.contrast(0.9);
-    item.brightness(1.1);
-    item.hue-rotate(-10);
-    item.saturate(1.5);
-  },
-
-  Valencia: function(item){
-    item.sepia(0.15);
-    item.saturate(1.5);
-    item.contrast(0.9);
-  },
-
-  Toaster: function(item){
-    item.sepia(0.4);
-    item.saturate(2.5);
-    item.hue-rotate(-30);
-    item.contrast(0.67);
-  },
-
-  Sutro: function(item){
-    item.brightness(0.75);
-    item.contrast(1.3);
-    item.sepia(0.5);
-    item.hue-rotate(-25);
-  },
-
-  Sierra: function(item){
-    item.contrast(0.8);
-    item.saturate(1.2);
-    item.sepia(0.15);
-  },
-
-  Rise: function(item){
-    item.saturate(1.4);
-    item.sepia(0.25);
-    item.hue-rotate(-15);
-    item.contrast(0.8);
-    item.brightness(1.1);
-  },
-
-  Nashville: function(item){
-    item.sepia(0.4);
-    item.saturate(1.5);
-    item.contrast(0.9);
-    item.brightness(1.1);
-    item.hue-rotate(-15);
-  },
-
-  Mayfair: function(item){
-    item.saturate(1.4);
-    item.contrast(1.1);
-  },
-
-  LoFi: function(item){
-    item.contrast(1.4);
-    item.brightness(0.9);
-    item.sepia(0.05);
-  },
-
-  Kelvin: function(item){
-    item.sepia(0.4);
-    item.saturate(2.4);
-    item.brightness(1.3);
-    item.contrast(1);
-  },
-
-  Inkwell: function(item){
-    item.grayscale(1);
-    item.brightness(1.2);
-    item.contrast(1.05);
-  },
-
-  Hudson: function(item){
-    item.contrast(1.2);
-    item.brightness(0.9);
-    item.hue-rotate(-10);
-  },
-
-  Hefe: function(item){
-    item.contrast(1.3);
-    item.sepia(0.3);
-    item.saturate(1.3);
-    item.hue-rotate(-10);
-    item.brightness(0.95);
-  },
-
-  Earlybird: function(item){
-    item.sepia(0.4);
-    item.saturate(1.6);
-    item.contrast(1.1);
-    item.brightness(0.9);
-    item.hue-rotate(-10);
-  },
-
-  Brannan: function(item){
-    item.sepia(0.5);
-    item.contrast(1.4);
-  },
-
-  Amaro: function(item){
-    item.hue-rotate(-10);
-    item.contrast(0.9);
-    item.brightness(1.1);
-    item.saturate(1.5);
-  },
-
-  IG1977: function(item){
-    item.sepia(0.5);
-    item.hue-rotate(-30);
-    item.saturate(1.2);
-    item.contrast(0.8);
-  }
+    grayscale: function (item) {
+        item.saturation(-100);
+        item.render();
+    },
+    sepia: function (item) {
+        item.saturation(-100);
+        item.vibrance(100);
+        item.sepia(100);
+        item.render();
+    },
+    sunburst: function (item) {
+        item.brightness(21);
+        item.vibrance(22);
+        item.contrast(11);
+        item.saturation(-18);
+        item.exposure(18);
+        item.sepia(17);
+        item.render();
+    },
+    port: function (item) {
+        item.vibrance(49);
+        item.hue(6);
+        item.gamma(0.6);
+        item.stackBlur(2);
+        item.contrast(11);
+        item.saturation(19);
+        item.exposure(2);
+        item.noise(2);
+        item.render();
+    }
 };
+
+// Custom Filters
+// var filters = {
+//   original: function(){},
+//
+//   XPro2: function(item){
+//     item.contrast(1.3);
+//     item.brightness(0.8);
+//     item.sepia(0.3);
+//     item.saturation(1.5);
+//     item.hue(-20);
+//     item.render();
+//   },
+//
+//   Willow: function(item){
+//     item.saturation(0.02);
+//     item.contrast(0.85);
+//     item.brightness(1.2);
+//     item.sepia(0.02);
+//     item.render();
+//   },
+//
+//   Walden: function(item){
+//     item.sepia(0.35);
+//     item.contrast(0.9);
+//     item.brightness(1.1);
+//     item.hue(-10);
+//     item.saturation(1.5);
+//     item.render();
+//   },
+//
+//   Valencia: function(item){
+//     item.sepia(0.15);
+//     item.saturation(1.5);
+//     item.contrast(0.9);
+//     item.render();
+//   },
+//
+//   Toaster: function(item){
+//     item.sepia(0.4);
+//     item.saturation(2.5);
+//     item.hue(-30);
+//     item.contrast(0.67);
+//     item.render();
+//   },
+//
+//   Sutro: function(item){
+//     item.brightness(0.75);
+//     item.contrast(1.3);
+//     item.sepia(0.5);
+//     item.hue(-25);
+//     item.render();
+//   },
+//
+//   Sierra: function(item){
+//     item.contrast(0.8);
+//     item.saturation(1.2);
+//     item.sepia(0.15);
+//     item.render();
+//   },
+//
+//   Rise: function(item){
+//     item.saturation(1.4);
+//     item.sepia(0.25);
+//     item.hue(-15);
+//     item.contrast(0.8);
+//     item.brightness(1.1);
+//     item.render();
+//   },
+//
+//   Nashville: function(item){
+//     item.sepia(0.4);
+//     item.saturation(1.5);
+//     item.contrast(0.9);
+//     item.brightness(1.1);
+//     item.hue(-15);
+//     item.render();
+//   },
+//
+//   Mayfair: function(item){
+//     item.saturation(1.4);
+//     item.contrast(1.1);
+//     item.render();
+//   },
+//
+//   LoFi: function(item){
+//     item.contrast(1.4);
+//     item.brightness(0.9);
+//     item.sepia(0.05);
+//     item.render();
+//   },
+//
+//   Kelvin: function(item){
+//     item.sepia(0.4);
+//     item.saturation(2.4);
+//     item.brightness(1.3);
+//     item.contrast(1);
+//     item.render();
+//   },
+//
+//   Inkwell: function(item){
+//     item.greyscale(1);
+//     item.brightness(1.2);
+//     item.contrast(1.05);
+//     item.render();
+//   },
+//
+//   Hudson: function(item){
+//     item.contrast(1.2);
+//     item.brightness(0.9);
+//     item.hue(-10);
+//     item.render();
+//   },
+//
+//   Hefe: function(item){
+//     item.contrast(1.3);
+//     item.sepia(0.3);
+//     item.saturation(1.3);
+//     item.hue(-10);
+//     item.brightness(0.95);
+//     item.render();
+//   },
+//
+//   Earlybird: function(item){
+//     item.sepia(0.4);
+//     item.saturation(1.6);
+//     item.contrast(1.1);
+//     item.brightness(0.9);
+//     item.hue(-10);
+//     item.render();
+//   },
+//
+//   Brannan: function(item){
+//     item.sepia(0.5);
+//     item.contrast(1.4);
+//     item.render();
+//   },
+//
+//   Amaro: function(item){
+//     item.hue(-10);
+//     item.contrast(0.9);
+//     item.brightness(1.1);
+//     item.saturation(1.5);
+//     item.render();
+//   },
+//
+//   IG1977: function(item){
+//     item.sepia(0.5);
+//     item.hue(-30);
+//     item.saturation(1.2);
+//     item.contrast(0.8);
+//     item.render();
+//   }
+// };
 
 function applyFilter(filterName){
   Caman('#image', function(){
@@ -218,13 +275,34 @@ function applyFilter(filterName){
   });
 }
 
+function bindSavingToDisk(){
+  var photoSaver = document.querySelector('#photoSaver');
+  photoSaver.addEventListener('change', function(){
+    var filePath = this.value;
+    fs.writeFile(filePath, photoData, 'base64', function(err){
+      if(err){ alert('There was an error saving the photo:', err.message); }
+      photoData = null;
+    });
+  });
+}
+
+function saveToDisk(){
+  var photoSaver = document.querySelector('#photoSaver');
+  var canvas     = document.querySelector('canvas');
+  photoSaver.setAttribute('nwsaves', 'Copy of ' + canvas.attributes['data-name'].value);
+  photoData      = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg|jpeg);base64,/, '');
+  photoSaver.click();
+}
+
 function backToGridView(){
-  var canvas = document.querySelector('canvas');
-  var image  = document.createElement('img');
-  image.setAttribute('id', 'image');
-  canvas.parentNode.removeChild(canvas);
-  var fullViewPhoto = document.querySelector('#fullViewPhoto');
-  fullViewPhoto.insertBefore(image, fullViewPhoto.firstChild);
+    var canvas  = document.querySelector('canvas');
+    if (canvas){
+      var image   = document.createElement('img');
+      image.setAttribute('id','image');
+      canvas.parentNode.removeChild(canvas);
+      var fullViewPhoto = document.querySelector('#fullViewPhoto');
+      fullViewPhoto.insertBefore(image, fullViewPhoto.firstChild);
+  }
   document.querySelector('#fullViewPhoto').style.display = 'none';
 }
 
@@ -253,6 +331,7 @@ window.onload = function(){
             addImageToPhotosArea(file);
             if (index === imageFiles.length-1) {
               bindClickingOnAllPhotos();
+              bindSavingToDisk();
             }
           });
         });
